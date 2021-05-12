@@ -1,6 +1,7 @@
 #my custom git ignore
 db.sqlite3
 output.html
+output-heroku.html
 
 
 # Byte-compiled / optimized / DLL files
