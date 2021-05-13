@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'googleauth',
     'account',
+    'dailyconsumtion',
 ]
 
 REST_FRAMEWORK = {
