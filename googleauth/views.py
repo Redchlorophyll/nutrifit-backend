@@ -13,17 +13,20 @@ from account.models import Profile
 
 
 class DummyView(APIView):
+    """ class to check whatever user already has token to access endpoint or not. """
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
+        """ get congratulation status when you succesfully logged in """
         content = {'status': "congrats,you sucessfully login with your gmail account!"}
         return Response(content)
 
 
 
 class GoogleView(APIView):
+    """ class to auth google user """
     def post(self, request):
-
+        """ function to log in or sign up using google account """
         # retrieve post request data
         data = {
             'email' : request.data.get('email'),
@@ -33,6 +36,7 @@ class GoogleView(APIView):
 
         try:
             user = User.objects.get(email=data['email'])
+            profile = Profile.objects.get(user=user)
         except User.DoesNotExist:
             user = User()
             user.username = data['username']
@@ -47,7 +51,10 @@ class GoogleView(APIView):
         token = RefreshToken.for_user(user)
         response = {}
 
+        response['user_id'] = user.id
         response['username'] = user.username
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
+        response['profile_pic'] = profile.profile_pic
+
         return Response(response)
