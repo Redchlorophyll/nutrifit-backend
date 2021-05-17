@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Daily_consumption(models.Model):
+class DailyConsumption(models.Model):
     food_name = models.CharField(max_length=90)
     quantity = models.IntegerField()
-    image_url = models.CharField(max_length=255, null=True,blank=True)
+    image_url = models.ImageField(upload_to="media/uploads/", null=True, blank=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     time_food_consumed = models.DateTimeField(auto_now_add=True)
     serving_size = models.IntegerField()

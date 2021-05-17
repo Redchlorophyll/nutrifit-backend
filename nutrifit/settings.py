@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import django_heroku
 import os
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -145,6 +146,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+
+PROJECT_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'credential.json'))
+
+
+DEFAULT_FILE_STORAGE = 'nutrifit.gcloud.GoogleCloudMediaFileStorage'
+GS_PROJECT_ID = 'x-entropy-313703'
+GS_STORAGE_BUCKET_NAME = 'nutrifit_bucket'
+GS_MEDIA_BUCKET_NAME = 'nutrifit_bucket'
+
+MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_MEDIA_BUCKET_NAME)
+MEDIA_ROOT = "media/"
+
+UPLOAD_ROOT = 'media/uploads/'
+
+DOWNLOAD_ROOT = os.path.join(PROJECT_ROOT, "static/media/downloads")
+DOWNLOAD_URL = STATIC_URL + "media/downloads"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
