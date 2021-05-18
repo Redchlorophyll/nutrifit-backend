@@ -9,6 +9,7 @@ class DailyConsumption(models.Model):
     image_url = models.ImageField(upload_to="media/uploads/", null=True, blank=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     time_food_consumed = models.DateTimeField(auto_now_add=True)
+    date_time_consumed = models.DateField(auto_now_add=True)
     serving_size = models.IntegerField()
     calories = models.IntegerField()
     total_fat = models.IntegerField()

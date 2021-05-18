@@ -7,5 +7,5 @@ router.register('profile', views.UserDetail, basename='profile')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('<int:pk>', include(router.urls)),
+    path('<int:pk>/', include(router.urls)),
 ]

@@ -7,15 +7,18 @@ from .serializers import DailyConsumptionSerializer
 from google.cloud import storage
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from rest_framework.views import APIView
+from django.db.models import Sum
+
 
 # Create your views here.
 
 class DailyConsumptionList(viewsets.ViewSet):
-    def list(self, request):
-        dailyconsumption = DailyConsumption.objects.all()
-        serializer = DailyConsumptionSerializer(dailyconsumption, many=True)
-
-        return Response(serializer.data)
+    # def list(self, request):
+    #     dailyconsumption = DailyConsumption.objects.all()
+    #     serializer = DailyConsumptionSerializer(dailyconsumption, many=True)
+    #
+    #     return Response(serializer.data)
 
     def create(self, request):
         serializer = DailyConsumptionSerializer(data=request.data)
@@ -28,7 +31,33 @@ class DailyConsumptionList(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         """ this retrieve method get list of data based on user_id  """
-        queryset = DailyConsumption.objects.filter(user_id=pk)
+        queryset = DailyConsumption.objects.filter(user_id=pk).order_by('-id')
         serializer = DailyConsumptionSerializer(queryset, many=True)
 
         return Response(serializer.data)
+
+
+class FoodJourney(APIView):
+
+    def get(self, request, userid=None):
+        foodjourney = DailyConsumption.objects.values("date_time_consumed").order_by("date_time_consumed").annotate(
+                                                calories=Sum('calories'),
+                                                total_fat=Sum('total_fat'),
+                                                saturated_fat=Sum('saturated_fat'),
+                                                cholesterol=Sum('cholesterol'),
+                                                sodium=Sum('sodium'),
+                                                fiber=Sum('fiber'),
+                                                sugar=Sum('sugar'),
+                                                protein=Sum('protein'),
+                                                food_name=Sum('food_name')
+                                                ).filter(user_id=userid).order_by('-date_time_consumed')[:30]
+
+        return Response(foodjourney)
+
+
+
+class FoodName(APIView):
+    def get(self, request, userid=None, date=None):
+        foodjourney = DailyConsumption.objects.values('food_name').filter(user_id=userid, date_time_consumed=date)
+
+        return Response(foodjourney)

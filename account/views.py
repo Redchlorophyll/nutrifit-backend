@@ -10,11 +10,11 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 class UserDetail(viewsets.ViewSet):
-    def list(self, request):
-        profile = Profile.objects.all()
-        serializer = ProfileSerializer(profile, many=True)
-
-        return Response(serializer.data)
+    # def list(self, request):
+    #     profile = Profile.objects.all()
+    #     serializer = ProfileSerializer(profile, many=True)
+    #
+    #     return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         user = User.objects.get(pk=pk)
