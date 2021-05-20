@@ -9,11 +9,13 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from django.db.models import Sum
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
 
 class DailyConsumptionList(viewsets.ViewSet):
+    # permission_classes = (IsAuthenticated,)
     # def list(self, request):
     #     dailyconsumption = DailyConsumption.objects.all()
     #     serializer = DailyConsumptionSerializer(dailyconsumption, many=True)
@@ -38,7 +40,7 @@ class DailyConsumptionList(viewsets.ViewSet):
 
 
 class FoodJourney(APIView):
-
+    # permission_classes = (IsAuthenticated,)
     def get(self, request, userid=None):
         foodjourney = DailyConsumption.objects.values("date_time_consumed").order_by("date_time_consumed").annotate(
                                                 calories=Sum('calories'),
@@ -49,7 +51,6 @@ class FoodJourney(APIView):
                                                 fiber=Sum('fiber'),
                                                 sugar=Sum('sugar'),
                                                 protein=Sum('protein'),
-                                                food_name=Sum('food_name')
                                                 ).filter(user_id=userid).order_by('-date_time_consumed')[:30]
 
         return Response(foodjourney)
