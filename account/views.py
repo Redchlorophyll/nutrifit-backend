@@ -6,10 +6,12 @@ from .models import Profile
 from .serializers import ProfileSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
 class UserDetail(viewsets.ViewSet):
+    permission_classes = (IsAuthenticated,)
     # def list(self, request):
     #     profile = Profile.objects.all()
     #     serializer = ProfileSerializer(profile, many=True)
