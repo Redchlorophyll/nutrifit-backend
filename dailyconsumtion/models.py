@@ -7,7 +7,7 @@ class CapturedFood(models.Model):
     image_url = models.ImageField(upload_to='media/uploads/')
 
     def __str__(self):
-        return "{}. {}".format(self.id, self.iamge_url)
+        return "{}. {}".format(self.id, self.image_url)
 
 
 

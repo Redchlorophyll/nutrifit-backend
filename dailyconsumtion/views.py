@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from .models import DailyConsumption
+from .models import DailyConsumption, CapturedFood
 from .serializers import DailyConsumptionSerializer, CapturedFoodSerializer
 from google.cloud import storage
 from django.shortcuts import get_object_or_404
@@ -15,8 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class DailyConsumptionList(viewsets.ViewSet):
-    # permission_classes = (IsAuthenticated,)
-    
+    permission_classes = (IsAuthenticated,)
+
     # def list(self, request):
     #     dailyconsumption = DailyConsumption.objects.all()
     #     serializer = DailyConsumptionSerializer(dailyconsumption, many=True)
@@ -45,7 +45,8 @@ class DailyConsumptionList(viewsets.ViewSet):
 
 
 class FoodJourney(APIView):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, userid=None):
         foodjourney = DailyConsumption.objects.values("date_time_consumed").annotate(
                                                 calories=Sum('calories'),
@@ -63,6 +64,8 @@ class FoodJourney(APIView):
 
 
 class FoodName(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, userid=None, date=None):
         foodjourney = DailyConsumption.objects.values('food_name').filter(user_id=userid, date_time_consumed=date).order_by("-id")
 
@@ -70,7 +73,9 @@ class FoodName(APIView):
 
 
 
-class CapturedFood(APIView):
+class CapturedImage(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, userid=None):
         serializer = CapturedFoodSerializer(data=request.data)
 
@@ -79,3 +84,14 @@ class CapturedFood(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class getImage(APIView):
+    permission_classes = (IsAuthenticated,)
+    
+    def get(self, request, imageid=None):
+        image = CapturedFood.objects.get(id=imageid)
+        serializer = CapturedFoodSerializer(image)
+
+        return Response(serializer.data)
