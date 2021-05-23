@@ -44,9 +44,9 @@ class GoogleView(APIView):
             user.email = data["email"]
             user.save()
 
-            profile = Profile.objects.get(user=user)
-            profile.profile_pic = data['profile_pic']
-            profile.save()
+        profile = Profile.objects.get(user=user)
+        profile.profile_pic = data['profile_pic']
+        profile.save()
 
         token = RefreshToken.for_user(user)
         response = {}
