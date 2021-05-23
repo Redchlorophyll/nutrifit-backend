@@ -56,5 +56,6 @@ class GoogleView(APIView):
         response['access_token'] = str(token.access_token)
         response['refresh_token'] = str(token)
         response['profile_pic'] = profile.profile_pic
+        response['email'] = user.email
 
         return Response(response)
