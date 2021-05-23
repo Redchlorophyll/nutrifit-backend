@@ -11,14 +11,11 @@ from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class UserDetail(viewsets.ViewSet):
+    #this variable is used to make sure to access this class user must be authenticated
     permission_classes = (IsAuthenticated,)
-    # def list(self, request):
-    #     profile = Profile.objects.all()
-    #     serializer = ProfileSerializer(profile, many=True)
-    #
-    #     return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
+        """ get profile data like user, weight, height, birth_date """
         user = User.objects.get(pk=pk)
         queryset = Profile.objects.all()
         profile = get_object_or_404(queryset, user=user)
@@ -27,6 +24,7 @@ class UserDetail(viewsets.ViewSet):
         return Response(serializer.data)
 
     def update(self, request, pk=None):
+        """ update profile data like user, weight, height, birth_date """
         profile = Profile.objects.get(pk=pk)
         serializer = ProfileSerializer(profile, data=request.data)
 

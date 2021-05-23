@@ -35,15 +35,18 @@ class GoogleView(APIView):
         }
 
         try:
+            # try to get user based on email first and get profile data
             user = User.objects.get(email=data['email'])
             profile = Profile.objects.get(user=user)
         except User.DoesNotExist:
+            # if data doesn't exists. create user data.
             user = User()
             user.username = data['username']
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data["email"]
             user.save()
 
+        # update image url. image url come from google mail image profile
         profile = Profile.objects.get(user=user)
         profile.profile_pic = data['profile_pic']
         profile.save()
@@ -51,6 +54,7 @@ class GoogleView(APIView):
         token = RefreshToken.for_user(user)
         response = {}
 
+        # generate result to use by frontend.
         response['user_id'] = user.id
         response['username'] = user.username
         response['access_token'] = str(token.access_token)

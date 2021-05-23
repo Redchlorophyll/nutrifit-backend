@@ -15,17 +15,16 @@ from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class DailyConsumptionList(viewsets.ViewSet):
+    #this variable is used to make sure to access this class user must be authenticated
     permission_classes = (IsAuthenticated,)
 
-    # def list(self, request):
-    #     dailyconsumption = DailyConsumption.objects.all()
-    #     serializer = DailyConsumptionSerializer(dailyconsumption, many=True)
-    #
-    #     return Response(serializer.data)
-
     def create(self, request):
+        """ POST list of food. can be more then one using list """
+
         list = []
         foodsconsumed = request.data
+
+        #iterate request first to get each data in list
         for food in foodsconsumed:
             serializer = DailyConsumptionSerializer(data=food)
             list.append(food)
@@ -48,6 +47,7 @@ class FoodJourney(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, userid=None):
+        """ GET sum of food eaten for each day for 30 days  """
         foodjourney = DailyConsumption.objects.values("date_time_consumed").annotate(
                                                 calories=Sum('calories'),
                                                 total_fat=Sum('total_fat'),
@@ -64,9 +64,11 @@ class FoodJourney(APIView):
 
 
 class FoodName(APIView):
+    #this variable is used to make sure to access this class user must be authenticated
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, userid=None, date=None):
+        """ GET list of food eaten in specific day """
         foodjourney = DailyConsumption.objects.values('food_name').filter(user_id=userid, date_time_consumed=date).order_by("-id")
 
         return Response(foodjourney)
@@ -74,9 +76,11 @@ class FoodName(APIView):
 
 
 class CapturedImage(APIView):
+    #this variable is used to make sure to access this class user must be authenticated
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, userid=None):
+        """ uplod image to google cloud storage. receive id to bind to food list  """
         serializer = CapturedFoodSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -88,9 +92,11 @@ class CapturedImage(APIView):
 
 
 class getImage(APIView):
+    #this variable is used to make sure to access this class user must be authenticated
     permission_classes = (IsAuthenticated,)
-    
+
     def get(self, request, imageid=None):
+        """  get food image url previously uploaded in google cloud storage with food image id """
         image = CapturedFood.objects.get(id=imageid)
         serializer = CapturedFoodSerializer(image)
 
