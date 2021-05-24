@@ -25,7 +25,8 @@ class UserDetail(viewsets.ViewSet):
 
     def update(self, request, pk=None):
         """ update profile data like user, weight, height, birth_date """
-        profile = Profile.objects.get(pk=pk)
+        user = User.objects.get(pk=pk)
+        profile = Profile.objects.get(user=user)
         serializer = ProfileSerializer(profile, data=request.data)
 
         if serializer.is_valid():
