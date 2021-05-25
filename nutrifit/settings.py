@@ -68,7 +68,7 @@ MIDDLEWARE = [
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=720)
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=720)
 }
 
 ROOT_URLCONF = 'nutrifit.urls'
@@ -104,6 +104,18 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# postgres with cloud SQL 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USERNAME'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD'),
+#         'HOST': os.environ.get('DB_HOST'),
+#         'PORT': '5432'
+#     }
+# }
 
 
 # Password validation
