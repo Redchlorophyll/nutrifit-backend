@@ -94,7 +94,6 @@ class CapturedImageWithPrediction(APIView):
             object = { 'image' : response}
             modeloutput = requests.post(model_endpoint, files=object)
 
-            print(modeloutput.status_code)
             if modeloutput.status_code == 200:
                 prediction_output = json.loads(modeloutput.content)
             else:
