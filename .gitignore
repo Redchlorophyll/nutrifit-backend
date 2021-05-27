@@ -6,6 +6,7 @@ credential.json
 .gcloudignore
 app.yaml
 cloud_sql_proxy
+staticfiles
 
 
 # Byte-compiled / optimized / DLL files
