@@ -18,7 +18,7 @@ class DummyView(APIView):
 
     def get(self, request):
         """ get congratulation status when you succesfully logged in """
-        content = {'status': "congrats,you sucessfully login with your gmail account!"}
+        content = {'status': "Congrats! you sucessfully login with your gmail account!"}
         return Response(content)
 
 

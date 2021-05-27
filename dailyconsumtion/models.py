@@ -1,10 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User
+from uuid import uuid4
+import os
 
 # Create your models here.
 
+def path_and_rename(instance, filename):
+    upload_to = 'media/uploads/'
+    # get file extension. like .png, .jpg or else that image extension
+    ext = filename.split('.')[-1]
+    name = filename.split('.')[0]
+    # get filename
+    new_name = "{}.{}".format(name, uuid4())
+    filename = "{}.{}".format(new_name, ext)
+
+    #return the whole path to the file
+    return os.path.join(upload_to, filename)
+
+
+
 class CapturedFood(models.Model):
-    image_url = models.ImageField(upload_to='media/uploads/')
+    upload_date = models.DateField(auto_now_add=True)
+    image_url = models.ImageField(upload_to=path_and_rename)
 
     def __str__(self):
         return "{}. {}".format(self.id, self.image_url)

@@ -2,7 +2,7 @@
 db.sqlite3
 output.html
 output-heroku.html
-#credential.json
+credential.json
 
 
 # Byte-compiled / optimized / DLL files

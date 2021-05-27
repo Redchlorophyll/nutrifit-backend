@@ -105,7 +105,7 @@ DATABASES = {
     }
 }
 
-# postgres with cloud SQL 
+# postgres with cloud SQL
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',

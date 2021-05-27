@@ -10,6 +10,9 @@ from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from django.db.models import Sum
 from rest_framework.permissions import IsAuthenticated
+import requests
+import json
+import os
 
 
 # Create your views here.
@@ -75,6 +78,41 @@ class FoodName(APIView):
 
 
 
+class CapturedImageWithPrediction(APIView):
+    #this variable is used to make sure to access this class user must be authenticated
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, model_name=None):
+        """ uplod image to google cloud storage and get prediction. receive image property consist id, url and upload date and also prediction result """
+        serializer = CapturedFoodSerializer(data=request.data)
+        prediction_output = ''
+
+        if serializer.is_valid():
+            model_url = os.environ.get('NUTRIFIT_ML_URL')
+            model_endpoint = "{}/v1/object-detection/{}".format(model_url, model_name)
+            response = request.FILES.get('image_url')
+            object = { 'image' : response}
+            modeloutput = requests.post(model_endpoint, files=object)
+
+            print(modeloutput.status_code)
+            if modeloutput.status_code == 200:
+                prediction_output = json.loads(modeloutput.content)
+            else:
+                prediction_output = 'you insert wrong model name! try again'
+
+            serializer.save()
+
+            output = {}
+            output['image_property'] = serializer.data
+            output['prediction'] = prediction_output
+
+
+
+            return Response(output, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class CapturedImage(APIView):
     #this variable is used to make sure to access this class user must be authenticated
     permission_classes = (IsAuthenticated,)
@@ -88,6 +126,7 @@ class CapturedImage(APIView):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
