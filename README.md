@@ -44,7 +44,7 @@ python manage.py runserver
 
 # credential
 
-this project require credential.json. you can get it from service account in your GCP project
+this project require credential.json. you can get it from service account in your GCP project.
 
 # endpoint documentation
 
