@@ -48,4 +48,4 @@ this project require credential.json. you can get it from service account in you
 
 # endpoint documentation
 
-[API documentation on bahasa indonesia (docs)]https://docs.google.com/document/d/1EeH0tcAX-J_keGM-7HH-Pztz-hrvbwxeh76ZqeRjcnU/edit?usp=sharing
+[API documentation on bahasa indonesia (docs)](https://docs.google.com/document/d/1EeH0tcAX-J_keGM-7HH-Pztz-hrvbwxeh76ZqeRjcnU/edit?usp=sharing)
