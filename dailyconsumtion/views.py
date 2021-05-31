@@ -72,9 +72,35 @@ class FoodName(APIView):
 
     def get(self, request, userid=None, date=None):
         """ GET list of food eaten in specific day """
-        foodjourney = DailyConsumption.objects.values('food_name').filter(user_id=userid, date_time_consumed=date).order_by("-id")
+        foodjourney = DailyConsumption.objects.values('food_name',
+                                                      'quantity',
+                                                      'CapturedFood_id',
+                                                      'time_food_consumed',
+                                                      'date_time_consumed',
+                                                      'serving_size',
+                                                      'calories',
+                                                      'total_fat',
+                                                      'saturated_fat',
+                                                      'cholesterol',
+                                                      'sodium',
+                                                      'carbonhydrates',
+                                                      'fiber',
+                                                      'sugar',
+                                                      'protein').filter(user_id=userid, date_time_consumed=date).order_by("-id")
 
         return Response(foodjourney)
+
+
+
+class MonthlyFood(APIView):
+    def get(self, request, userid=False, year=False, month=False):
+        foodjourney = DailyConsumption.objects.filter(user_id=userid,
+                                                      date_time_consumed__year=year,
+                                                      date_time_consumed__month=month)
+
+        serializer = DailyConsumptionSerializer(foodjourney, many=True)
+
+        return Response(serializer.data)
 
 
 

@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -107,7 +107,7 @@ if os.getenv("GAE_APPLICATION", None):
             'USER': os.environ.get('DB_USERNAME'),
             'PASSWORD': os.environ.get('DB_PASSWORD'),
             # 'HOST': os.environ.get('DB_HOST'),
-            'HOST': "/cloudsql/x-entropy-313703:asia-southeast2:nutrifit",
+            'HOST': os.environ.get('DB_HOST'),
             'PORT': '5432'
         }
     }
@@ -118,7 +118,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

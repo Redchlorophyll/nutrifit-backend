@@ -11,6 +11,7 @@ urlpatterns = [
     path('uploadimage/<int:imageid>/', views.getImage.as_view()),
     path('uploadimage/prediction/<str:model_name>', views.CapturedImageWithPrediction.as_view()),
     # path('<int:user_id>', include(router.urls)),
+    path('journey/<int:userid>/monthlyfood/<str:year>/<str:month>', views.MonthlyFood.as_view()),
     path('journey/<int:userid>/', views.FoodJourney.as_view()),
     path('journey/<int:userid>/<str:date>/', views.FoodName.as_view()),
     path('<int:userid>/', include(router.urls)),

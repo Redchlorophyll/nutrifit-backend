@@ -2,11 +2,11 @@
 db.sqlite3
 output.html
 output-heroku.html
-credential.json
+# credential.json
 .gcloudignore
 app.yaml
 cloud_sql_proxy
-staticfiles
+# staticfiles
 
 
 # Byte-compiled / optimized / DLL files
