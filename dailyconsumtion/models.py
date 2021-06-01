@@ -19,12 +19,25 @@ def path_and_rename(instance, filename):
 
 
 
+class CapturedFoodManager(models.Manager):
+    def get_by_natural_key(self, upload_date, image_url):
+        return self.get(upload_date=upload_date, image_url=image_url)
+
+
+
 class CapturedFood(models.Model):
     upload_date = models.DateField(auto_now_add=True)
     image_url = models.ImageField(upload_to=path_and_rename)
 
+    objects = CapturedFoodManager()
+
     def __str__(self):
         return "{}. {}".format(self.id, self.image_url)
+
+    def natural_key(self):
+        return (self.upload_date, self.image_url)
+
+
 
 
 

@@ -93,14 +93,32 @@ class FoodName(APIView):
 
 
 class MonthlyFood(APIView):
+    # permission_classes = (IsAuthenticated,)
+
     def get(self, request, userid=False, year=False, month=False):
         foodjourney = DailyConsumption.objects.filter(user_id=userid,
                                                       date_time_consumed__year=year,
                                                       date_time_consumed__month=month)
 
-        serializer = DailyConsumptionSerializer(foodjourney, many=True)
+        date_list = []
+        date_string = ''
+        food_in_date = {}
+        # serializer = DailyConsumptionSerializer(foodjourney, many=True)
+        dates = foodjourney.values('date_time_consumed').distinct()
 
-        return Response(serializer.data)
+        for index in range(len(dates)):
+            get_date_string = dates[index]['date_time_consumed']
+            date_list.append(get_date_string)
+
+        for date in date_list:
+            dict = {}
+            queryset = DailyConsumption.objects.filter(date_time_consumed=date)
+            serializer = DailyConsumptionSerializer(queryset, many=True)
+
+            foodlist = 'hello'
+            food_in_date[str(date)] = serializer.data
+
+        return Response(food_in_date)
 
 
 
