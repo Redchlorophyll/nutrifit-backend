@@ -102,6 +102,7 @@ class MonthlyFood(APIView):
                                                       date_time_consumed__month=month).order_by('-id')
 
         date_list = []
+        output = {}
         date_string = ''
         food_in_date = {}
         # serializer = DailyConsumptionSerializer(foodjourney, many=True)
@@ -120,10 +121,11 @@ class MonthlyFood(APIView):
             for data in json.loads(serializer):
                 query.append(data["fields"])
 
-            foodlist = 'hello'
             food_in_date[str(date)] = query
 
-        return Response(food_in_date)
+        output['sortbydate'] = food_in_date
+
+        return Response(output)
 
 
 
