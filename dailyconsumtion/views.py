@@ -112,7 +112,7 @@ class MonthlyFood(APIView):
 
         for date in date_list:
             dict = {}
-            queryset = DailyConsumption.objects.filter(date_time_consumed=date)
+            queryset = DailyConsumption.objects.filter(date_time_consumed=date, user_id=userid)
             serializer = DailyConsumptionSerializer(queryset, many=True)
 
             foodlist = 'hello'
