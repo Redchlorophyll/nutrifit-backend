@@ -93,7 +93,7 @@ class FoodName(APIView):
 
 
 class MonthlyFood(APIView):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, userid=False, year=False, month=False):
         foodjourney = DailyConsumption.objects.filter(user_id=userid,
