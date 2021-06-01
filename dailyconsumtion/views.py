@@ -93,40 +93,80 @@ class FoodName(APIView):
 
 
 
+# class MonthlyFood(APIView):
+#     permission_classes = (IsAuthenticated,)
+#
+#     def get(self, request, userid=False, year=False, month=False):
+#         foodjourney = DailyConsumption.objects.filter(user_id=userid,
+#                                                       date_time_consumed__year=year,
+#                                                       date_time_consumed__month=month).order_by('-id')
+#
+#         date_list = []
+#         output = {}
+#         date_string = ''
+#         food_in_date = {}
+#         # serializer = DailyConsumptionSerializer(foodjourney, many=True)
+#         dates = foodjourney.values('date_time_consumed').distinct()
+#
+#         for index in range(len(dates)):
+#             get_date_string = dates[index]['date_time_consumed']
+#             date_list.append(get_date_string)
+#
+#         for date in date_list:
+#             dict = {}
+#             query = []
+#             queryset = DailyConsumption.objects.filter(date_time_consumed=date, user_id=userid).order_by('-id')
+#             serializer = serializers.serialize("json", queryset, indent=2, use_natural_foreign_keys=True, use_natural_primary_keys=True)
+#
+#             for data in json.loads(serializer):
+#                 query.append(data["fields"])
+#
+#             food_in_date[str(date)] = query
+#
+#         output['sortbydate'] = food_in_date
+#
+#         return Response(output)
+
+
+
 class MonthlyFood(APIView):
     permission_classes = (IsAuthenticated,)
+
 
     def get(self, request, userid=False, year=False, month=False):
         foodjourney = DailyConsumption.objects.filter(user_id=userid,
                                                       date_time_consumed__year=year,
                                                       date_time_consumed__month=month).order_by('-id')
-
+        list = []
         date_list = []
         output = {}
         date_string = ''
-        food_in_date = {}
+        foodlist = {}
         # serializer = DailyConsumptionSerializer(foodjourney, many=True)
-        dates = foodjourney.values('date_time_consumed').distinct()
+        dates = foodjourney.values('date_time_consumed').distinct().order_by('-date_time_consumed')
 
         for index in range(len(dates)):
             get_date_string = dates[index]['date_time_consumed']
             date_list.append(get_date_string)
 
+
         for date in date_list:
-            dict = {}
+            print(str(date))
             query = []
-            queryset = DailyConsumption.objects.filter(date_time_consumed=date, user_id=userid).order_by('-id')
+            queryset = DailyConsumption.objects.filter(date_time_consumed=str(date), user_id=userid).order_by('-id')
             serializer = serializers.serialize("json", queryset, indent=2, use_natural_foreign_keys=True, use_natural_primary_keys=True)
 
             for data in json.loads(serializer):
                 query.append(data["fields"])
 
-            food_in_date[str(date)] = query
+            # output[str(date)] = query
 
-        output['sortbydate'] = food_in_date
+            output['date'] = date
+            output['foodlist'] = query
+            list.append(output)
+            output = output.fromkeys(output, 0)
 
-        return Response(output)
-
+        return Response(list)
 
 
 class CapturedImageWithPrediction(APIView):
