@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from django.db.models import Sum
 from rest_framework.permissions import IsAuthenticated
+from django.core import serializers
 import requests
 import json
 import os
@@ -98,7 +99,7 @@ class MonthlyFood(APIView):
     def get(self, request, userid=False, year=False, month=False):
         foodjourney = DailyConsumption.objects.filter(user_id=userid,
                                                       date_time_consumed__year=year,
-                                                      date_time_consumed__month=month)
+                                                      date_time_consumed__month=month).order_by('-id')
 
         date_list = []
         date_string = ''
@@ -112,11 +113,15 @@ class MonthlyFood(APIView):
 
         for date in date_list:
             dict = {}
-            queryset = DailyConsumption.objects.filter(date_time_consumed=date, user_id=userid)
-            serializer = DailyConsumptionSerializer(queryset, many=True)
+            query = []
+            queryset = DailyConsumption.objects.filter(date_time_consumed=date, user_id=userid).order_by('-id')
+            serializer = serializers.serialize("json", queryset, indent=2, use_natural_foreign_keys=True, use_natural_primary_keys=True)
+
+            for data in json.loads(serializer):
+                query.append(data["fields"])
 
             foodlist = 'hello'
-            food_in_date[str(date)] = serializer.data
+            food_in_date[str(date)] = query
 
         return Response(food_in_date)
 

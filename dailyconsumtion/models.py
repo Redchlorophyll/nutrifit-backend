@@ -35,7 +35,7 @@ class CapturedFood(models.Model):
         return "{}. {}".format(self.id, self.image_url)
 
     def natural_key(self):
-        return (self.upload_date, self.image_url)
+        return (self.image_url.url)
 
 
 
