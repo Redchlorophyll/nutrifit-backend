@@ -73,23 +73,21 @@ class FoodName(APIView):
 
     def get(self, request, userid=None, date=None):
         """ GET list of food eaten in specific day """
-        foodjourney = DailyConsumption.objects.values('food_name',
-                                                      'quantity',
-                                                      'CapturedFood_id',
-                                                      'time_food_consumed',
-                                                      'date_time_consumed',
-                                                      'serving_size',
-                                                      'calories',
-                                                      'total_fat',
-                                                      'saturated_fat',
-                                                      'cholesterol',
-                                                      'sodium',
-                                                      'carbonhydrates',
-                                                      'fiber',
-                                                      'sugar',
-                                                      'protein').filter(user_id=userid, date_time_consumed=date).order_by("-id")
+        foodjourney = DailyConsumption.objects.filter(user_id=userid, date_time_consumed=date).order_by("-id")
+        serializer = DailyConsumptionSerializer(foodjourney, many=True)
+        query = []
+        # serializer = serializers.serialize('json', foodjourney, indent=2, use_natural_foreign_keys=True, use_natural_primary_keys=True)
+        # print(serializer)
+        # for index in range(len(foodjourney)):
+        #     food = foodjourney[index]
+        #     serializer = serializers.serialize("json", food, indent=2)
+        #
+        #     for data in json.loads(serializer):
+        #         query.append(data["fields"])
 
-        return Response(foodjourney)
+
+
+        return Response(serializer.data)
 
 
 
